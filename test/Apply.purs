@@ -9,7 +9,7 @@ import Dotenv.Internal.Apply (applySettings)
 import Dotenv.Internal.Environment (EnvironmentF(..), _environment)
 import Dotenv.Internal.Types (ResolvedValue, Setting)
 import Run (Run, case_, extract, interpret, on)
-import Run.Writer (WRITER, runWriter, tell)
+import Run.Writer (Writer, runWriter, tell)
 import Test.Spec (Spec, describe, it)
 import Test.Spec.Assertions (shouldEqual, shouldNotContain)
 
@@ -19,7 +19,7 @@ settings = [ Tuple "VAR_ONE" $ Just "one", Tuple "VAR_TWO" $ Just "two" ]
 predefinedVariables :: Map String String
 predefinedVariables = singleton "VAR_TWO" "2" # insert "VAR_THREE" "3"
 
-handleEnvironment :: forall r. EnvironmentF ~> Run (writer :: WRITER (Array (Tuple String String)) | r)
+handleEnvironment :: forall r. EnvironmentF ~> Run (writer :: Writer (Array (Tuple String String)) | r)
 handleEnvironment =
   case _ of
     LookupEnv name callback ->

@@ -3,19 +3,20 @@
 module Dotenv.Internal.Resolve (resolveValues) where
 
 import Prelude
+
 import Data.Array (unzip, zip)
 import Data.Foldable (find)
 import Data.Maybe (Maybe(..))
 import Data.String (joinWith, trim)
 import Data.Traversable (sequence, traverse)
 import Data.Tuple (Tuple(..), fst, snd)
-import Dotenv.Internal.ChildProcess (CHILD_PROCESS, spawn)
-import Dotenv.Internal.Environment (ENVIRONMENT, lookupEnv)
+import Dotenv.Internal.ChildProcess (ChildProcessF, spawn)
+import Dotenv.Internal.Environment (EnvironmentF, lookupEnv)
 import Dotenv.Internal.Types (ResolvedValue, Setting, UnresolvedValue(..))
 import Run (Run)
 
 -- | A row that tracks the effects involved in value resolution
-type Resolution r = (childProcess :: CHILD_PROCESS, environment :: ENVIRONMENT | r)
+type Resolution r = (childProcess :: ChildProcessF, environment :: EnvironmentF | r)
 
 -- | Resolves a value according to its expression.
 resolveValue :: forall r. Array (Setting UnresolvedValue) -> UnresolvedValue -> Run (Resolution r) ResolvedValue
